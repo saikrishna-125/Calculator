@@ -1,0 +1,89 @@
+button {
+  font-size: 24px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+body {
+  display: flex;
+  background-color: #ecf39e;
+  justify-content: center;
+}
+
+#container {
+  flex: 0 0 auto;
+  width: 504px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: #132a13;
+  padding: 20px;
+  margin-top: 50px;
+  border-radius: 16px;
+}
+
+#display {
+  height: 120px;
+  background-color: #ecf39e;
+  border-radius: 8px;
+  text-align: right;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 20px;
+  font-size: 64px;
+  color: #132a13;
+}
+
+#buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.number,
+.operation {
+  width: 120px;
+  height: 120px;
+  border: none;
+  padding: 0px;
+}
+
+.number {
+  background-color: #90a955;
+  color: #132a13;
+}
+
+.operation,
+#clear {
+  background-color: #4f772d;
+  color: #ecf39e;
+}
+
+#numbers {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+}
+
+#operations {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#clear {
+  border: none;
+  padding: 0px;
+  height: 120px;
+  flex: 1;
+}
+
+button:hover,
+#clear:hover {
+  background-color: #31572c;
+}
