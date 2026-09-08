@@ -9,6 +9,8 @@ let active = "num1";
 const buttons = document.querySelectorAll("button");
 const display = document.querySelector("#display");
 
+display.textContent = 0;
+
 for (let button of buttons) {
   button.addEventListener("click", () => {
     char = button.textContent;
@@ -17,31 +19,36 @@ for (let button of buttons) {
       operation[active] += char;
       display.textContent = operation[active];
     } else if ("+-x/".includes(char)) {
-      if (operation["num2"]) {
-        operation["num1"] = calculate(
-          operation["num1"],
-          operation["num2"],
-          operation["operator"],
+      if (operation.num2) {
+        operation.num1 = calculate(
+          operation.num1,
+          operation.num2,
+          operation.operator,
         );
-        operation["num2"] = "";
+        operation.num2 = "";
         active = "num1";
         display.textContent = operation[active];
         active = "num2";
       } else {
         active = "num2";
       }
-      operation["operator"] = char;
+      operation.operator = char;
     } else if (char === "=") {
-      operation["num1"] = calculate(
-        operation["num1"],
-        operation["num2"],
-        operation["operator"],
+      operation.num1 = calculate(
+        operation.num1,
+        operation.num2,
+        operation.operator,
       );
-      operation["num2"] = "";
       active = "num1";
       display.textContent = operation[active];
-
+      operation.num2 = "";
       active = "num2";
+    } else if (char === "Clear") {
+      operation.num1 = "";
+      operation.num2 = "";
+      operation.operator = "";
+      active = "num1";
+      display.textContent = "0";
     }
   });
 }

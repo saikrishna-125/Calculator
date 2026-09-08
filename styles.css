@@ -24,18 +24,25 @@ body {
 }
 
 #display {
-  height: 120px;
+  box-sizing: border-box;
+  width: 504px;
+  display: flex;
   background-color: #ecf39e;
   border-radius: 8px;
   text-align: right;
   margin: 8px 0;
-  display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 20px;
+  padding: 10px 20px;
   font-size: 64px;
   color: #132a13;
+  word-break: break-all;
 }
+
+/* #display p {
+  width: 500px;
+  margin: 0px;
+} */
 
 #buttons {
   display: flex;
