@@ -9,36 +9,26 @@ let active = "num1";
 const buttons = document.querySelectorAll("button");
 const display = document.querySelector("#display");
 
-display.textContent = 0;
+display.textContent = "0";
 
 for (let button of buttons) {
   button.addEventListener("click", () => {
-    char = button.textContent;
+    let char = button.textContent;
 
     if (isFinite(char)) {
       operation[active] += char;
       display.textContent = operation[active];
     } else if ("+-x/".includes(char)) {
       if (operation.num2) {
-        operation.num1 = calculate(
-          operation.num1,
-          operation.num2,
-          operation.operator,
-        );
+        operation.num1 = calculate(operation);
+        display.textContent = operation.num1;
         operation.num2 = "";
-        active = "num1";
-        display.textContent = operation[active];
-        active = "num2";
-      } else {
         active = "num2";
       }
+      active = "num2";
       operation.operator = char;
     } else if (char === "=") {
-      operation.num1 = calculate(
-        operation.num1,
-        operation.num2,
-        operation.operator,
-      );
+      operation.num1 = calculate(operation);
       active = "num1";
       display.textContent = operation[active];
       operation.num2 = "";
@@ -70,7 +60,7 @@ function divide(num1, num2) {
 }
 
 function operate(num1, num2, operator) {
-  result = 0;
+  let result = 0;
   switch (operator) {
     case "+":
       result = add(num1, num2);
@@ -85,16 +75,20 @@ function operate(num1, num2, operator) {
       result = divide(num1, num2);
       break;
   }
-
+  console.log(result);
   return result;
 }
 
-function calculate(num1, num2, operator) {
-  if (num2 === "") {
-    num2 = operator === "+-" ? 0 : 1;
+function calculate(operation) {
+  if (operation.num2 === "") {
+    num2 = operation.operator === "+-" ? 0 : 1;
   }
 
-  result = operate(Number(num1), Number(num2), operator);
+  let result = operate(
+    Number(operation.num1),
+    Number(operation.num2),
+    operation.operator,
+  );
   result = Math.round(result * 10 ** 8) / 10 ** 8;
   return result;
 }

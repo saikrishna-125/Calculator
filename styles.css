@@ -39,11 +39,6 @@ body {
   word-break: break-all;
 }
 
-/* #display p {
-  width: 500px;
-  margin: 0px;
-} */
-
 #buttons {
   display: flex;
   flex-direction: row;
