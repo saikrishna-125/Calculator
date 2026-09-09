@@ -1,36 +1,62 @@
 const buttons = document.querySelectorAll("button");
 const display = document.querySelector("#display");
 
+const body = document.querySelector("body");
+
 let operation = {
-  num1: "0",
+  num1: "",
   num2: "",
   operator: "",
 };
 
 let active = "num1";
 
-display.textContent = operation[active];
+display.textContent = "_";
+
+body.addEventListener("keydown", (e) => {
+  let key = e.key;
+
+  if (key === "Backspace") {
+    key = "BACK";
+  }
+
+  if (key === "*") {
+    key = "x";
+  }
+
+  if (key === "Enter") {
+    key = "=";
+  }
+
+  actions(key);
+});
 
 for (let button of buttons) {
   button.addEventListener("click", () => {
     let char = button.textContent;
 
-    if (isFinite(char) || char === "." || char === "BACK" || char === "+ / -") {
-      inputNumber(char);
-    } else if ("+-x/".includes(char)) {
+    actions(char);
+  });
+}
+
+function actions(char) {
+  if (isFinite(char) || char === "." || char === "BACK" || char === "+ / -") {
+    inputNumber(char);
+  } else if ("+-x/".includes(char)) {
+    if (operation.num1) {
       active = "num2";
       if (operation.num2) {
         calculate();
       }
       operation.operator = char;
-    } else if (char === "=") {
-      calculate();
-      operation.operator = "=";
-    } else if (char === "CLEAR") {
-      reset();
-      display.textContent = operation.num1;
     }
-  });
+  } else if (char === "=") {
+    calculate();
+    operation.operator = "=";
+  } else if (char === "CLEAR") {
+    reset();
+    display.textContent = "_";
+  }
 }
 
 function inputNumber(char) {
@@ -77,7 +103,7 @@ function inputNumber(char) {
 }
 
 function calculate() {
-  if (operation.num1 === "-") {
+  if (operation.num1 === "-" || operation.num1 === "") {
     operation.num1 = "0";
   }
   if (operation.num2 === "-") {
@@ -102,7 +128,7 @@ function calculate() {
 }
 
 function reset() {
-  operation.num1 = "0";
+  operation.num1 = "";
   operation.num2 = "";
   operation.operator = "";
   active = "num1";
