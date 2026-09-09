@@ -60,7 +60,8 @@ body {
 }
 
 .operation,
-#clear {
+#clear,
+#back {
   background-color: #4f772d;
   color: #ecf39e;
 }
@@ -78,7 +79,8 @@ body {
   gap: 8px;
 }
 
-#clear {
+#clear,
+#back {
   border: none;
   padding: 0px;
   height: 120px;

@@ -1,3 +1,6 @@
+const buttons = document.querySelectorAll("button");
+const display = document.querySelector("#display");
+
 let operation = {
   num1: "",
   num2: "",
@@ -7,8 +10,8 @@ let operation = {
 let snarky_msg = "That ain't right!";
 let active = "num1";
 
-const buttons = document.querySelectorAll("button");
-const display = document.querySelector("#display");
+let hasDecimalPoint = false;
+let negative = false;
 
 display.textContent = "0";
 
@@ -16,18 +19,33 @@ for (let button of buttons) {
   button.addEventListener("click", () => {
     let char = button.textContent;
 
-    if (isFinite(char)) {
+    if (
+      isFinite(char) ||
+      (char === "." && !hasDecimalPoint) ||
+      char === "Back"
+    ) {
       if (operation.operator === "=") {
         reset();
       }
-      operation[active] += char;
-      display.textContent = operation[active];
+
+      if (char === "Back") {
+        backspace();
+      } else {
+        operation[active] += char;
+      }
+      display.textContent =
+        operation[active].length === 0 ? "0" : operation[active];
+
+      if (char === ".") {
+        hasDecimalPoint = true;
+      }
     } else if ("+-x/".includes(char)) {
       if (operation.num2) {
         calculate(operation);
       }
       active = "num2";
       operation.operator = char;
+      hasDecimalPoint = false;
     } else if (char === "=") {
       calculate(operation);
       operation.operator = char;
@@ -58,6 +76,7 @@ function calculate(operation) {
     operation.num2 = "";
     operation.operator = "";
     active = "num2";
+    hasDecimalPoint = false;
   }
 }
 
@@ -86,6 +105,12 @@ function divideByZero() {
   display.textContent = snarky_msg;
 }
 
+function backspace() {
+  if (operation[active] !== "") {
+    operation[active] = operation[active].slice(0, -1);
+  }
+}
+
 function add(num1, num2) {
   return num1 + num2;
 }
@@ -107,4 +132,5 @@ function reset() {
   operation.num2 = "";
   operation.operator = "";
   active = "num1";
+  hasDecimalPoint = false;
 }
