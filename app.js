@@ -15,20 +15,18 @@ for (let button of buttons) {
   button.addEventListener("click", () => {
     let char = button.textContent;
 
-    if (isFinite(char)) {
+    if (isFinite(char) || char === "." || char === "BACK") {
       inputNumber(char);
     } else if ("+-x/".includes(char)) {
       active = "num2";
-
       if (operation.num2) {
         calculate();
       }
-
       operation.operator = char;
     } else if (char === "=") {
       calculate();
       operation.operator = "=";
-    } else if (char === "Clear") {
+    } else if (char === "CLEAR") {
       reset();
       display.textContent = operation.num1;
     }
@@ -40,12 +38,27 @@ function inputNumber(char) {
     reset();
   }
   current = operation[active];
-  if (current === "0") {
-    if (char !== "0") {
-      current = char;
+
+  if (char === ".") {
+    if (current === "") {
+      current = "0.";
+    }
+    if (!current.includes(char)) {
+      current += char;
+    }
+  } else if (char === "BACK") {
+    current = current.slice(0, -1);
+    if (current === "") {
+      current = "0";
     }
   } else {
-    current += char;
+    if (current === "0") {
+      if (char !== "0") {
+        current = char;
+      }
+    } else {
+      current += char;
+    }
   }
 
   operation[active] = current;
