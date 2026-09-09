@@ -88,6 +88,7 @@ body {
 }
 
 button:hover,
-#clear:hover {
+#clear:hover,
+#back:hover {
   background-color: #31572c;
 }
