@@ -17,64 +17,48 @@ for (let button of buttons) {
     let char = button.textContent;
 
     if (isFinite(char)) {
+      if (operation.operator === "=") {
+        reset();
+      }
       operation[active] += char;
       display.textContent = operation[active];
     } else if ("+-x/".includes(char)) {
       if (operation.num2) {
-        if (Number(operation.num2) === 0 && operation.operator === "/") {
-          operation.num1 = "";
-          operation.num2 = "";
-          operation.operator = "";
-          active = "num1";
-          display.textContent = snarky_msg;
-        } else {
-          operation.num1 = calculate(operation);
-          display.textContent = operation.num1;
-          operation.num2 = "";
-          active = "num2";
-        }
+        calculate(operation);
       }
       active = "num2";
       operation.operator = char;
     } else if (char === "=") {
-      if (Number(operation.num2) === 0 && operation.operator === "/") {
-        operation.num1 = "";
-        operation.num2 = "";
-        operation.operator = "";
-        active = "num1";
-        display.textContent = snarky_msg;
-      } else {
-        operation.num1 = calculate(operation);
-        active = "num1";
-        display.textContent = operation[active];
-        operation.num2 = "";
-        operation.operator = "";
-        active = "num2";
-      }
+      calculate(operation);
+      operation.operator = char;
     } else if (char === "Clear") {
-      operation.num1 = "";
-      operation.num2 = "";
-      operation.operator = "";
-      active = "num1";
+      reset();
       display.textContent = "0";
     }
   });
 }
 
-function add(num1, num2) {
-  return num1 + num2;
-}
+function calculate(operation) {
+  if (Number(operation.num2) === 0 && operation.operator === "/") {
+    divideByZero();
+  } else {
+    if (operation.num2 === "" || operation.operator === "") {
+      return operation.num1;
+    }
 
-function subtract(num1, num2) {
-  return num1 - num2;
-}
+    let result = operate(
+      Number(operation.num1),
+      Number(operation.num2),
+      operation.operator,
+    );
+    result = Math.round(result * 10 ** 8) / 10 ** 8;
 
-function multiply(num1, num2) {
-  return num1 * num2;
-}
-
-function divide(num1, num2) {
-  return num1 / num2;
+    operation.num1 = result;
+    display.textContent = operation.num1;
+    operation.num2 = "";
+    operation.operator = "";
+    active = "num2";
+  }
 }
 
 function operate(num1, num2, operator) {
@@ -97,16 +81,30 @@ function operate(num1, num2, operator) {
   return result;
 }
 
-function calculate(operation) {
-  if (operation.num2 === "" || operation.operator === "") {
-    return operation.num1;
-  }
+function divideByZero() {
+  reset();
+  display.textContent = snarky_msg;
+}
 
-  let result = operate(
-    Number(operation.num1),
-    Number(operation.num2),
-    operation.operator,
-  );
-  result = Math.round(result * 10 ** 8) / 10 ** 8;
-  return result;
+function add(num1, num2) {
+  return num1 + num2;
+}
+
+function subtract(num1, num2) {
+  return num1 - num2;
+}
+
+function multiply(num1, num2) {
+  return num1 * num2;
+}
+
+function divide(num1, num2) {
+  return num1 / num2;
+}
+
+function reset() {
+  operation.num1 = "";
+  operation.num2 = "";
+  operation.operator = "";
+  active = "num1";
 }
