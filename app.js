@@ -4,6 +4,7 @@ let operation = {
   operator: "",
 };
 
+let snarky_msg = "That ain't right!";
 let active = "num1";
 
 const buttons = document.querySelectorAll("button");
@@ -20,19 +21,36 @@ for (let button of buttons) {
       display.textContent = operation[active];
     } else if ("+-x/".includes(char)) {
       if (operation.num2) {
-        operation.num1 = calculate(operation);
-        display.textContent = operation.num1;
-        operation.num2 = "";
-        active = "num2";
+        if (Number(operation.num2) === 0 && operation.operator === "/") {
+          operation.num1 = "";
+          operation.num2 = "";
+          operation.operator = "";
+          active = "num1";
+          display.textContent = snarky_msg;
+        } else {
+          operation.num1 = calculate(operation);
+          display.textContent = operation.num1;
+          operation.num2 = "";
+          active = "num2";
+        }
       }
       active = "num2";
       operation.operator = char;
     } else if (char === "=") {
-      operation.num1 = calculate(operation);
-      active = "num1";
-      display.textContent = operation[active];
-      operation.num2 = "";
-      active = "num2";
+      if (Number(operation.num2) === 0 && operation.operator === "/") {
+        operation.num1 = "";
+        operation.num2 = "";
+        operation.operator = "";
+        active = "num1";
+        display.textContent = snarky_msg;
+      } else {
+        operation.num1 = calculate(operation);
+        active = "num1";
+        display.textContent = operation[active];
+        operation.num2 = "";
+        operation.operator = "";
+        active = "num2";
+      }
     } else if (char === "Clear") {
       operation.num1 = "";
       operation.num2 = "";
@@ -80,8 +98,8 @@ function operate(num1, num2, operator) {
 }
 
 function calculate(operation) {
-  if (operation.num2 === "") {
-    num2 = operation.operator === "+-" ? 0 : 1;
+  if (operation.num2 === "" || operation.operator === "") {
+    return operation.num1;
   }
 
   let result = operate(
