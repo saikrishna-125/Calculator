@@ -15,7 +15,7 @@ for (let button of buttons) {
   button.addEventListener("click", () => {
     let char = button.textContent;
 
-    if (isFinite(char) || char === "." || char === "BACK") {
+    if (isFinite(char) || char === "." || char === "BACK" || char === "+ / -") {
       inputNumber(char);
     } else if ("+-x/".includes(char)) {
       active = "num2";
@@ -51,11 +51,22 @@ function inputNumber(char) {
     if (current === "") {
       current = "0";
     }
+  } else if (char === "+ / -") {
+    if (!current.startsWith("-")) {
+      current = "-" + current;
+      if (current === "-") {
+        current = "-0";
+      }
+    } else {
+      current = current.slice(1);
+    }
   } else {
     if (current === "0") {
       if (char !== "0") {
         current = char;
       }
+    } else if (current === "-0") {
+      current = "-" + char;
     } else {
       current += char;
     }
@@ -66,6 +77,12 @@ function inputNumber(char) {
 }
 
 function calculate() {
+  if (operation.num1 === "-") {
+    operation.num1 = "0";
+  }
+  if (operation.num2 === "-") {
+    operation.num2 = "0";
+  }
   if (operation.num2 !== "") {
     if (Number(operation.num2) === 0 && operation.operator === "/") {
       display.textContent = "That ain't right!";
