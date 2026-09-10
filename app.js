@@ -46,7 +46,12 @@ for (let button of buttons) {
 
 function actions(char) {
   // input handling conditions
-  if (isFinite(char) || char === "." || char === "BACK" || char === "+ / -") {
+  if (
+    "0123456789".includes(char) ||
+    char === "." ||
+    char === "BACK" ||
+    char === "+ / -"
+  ) {
     inputNumber(char);
   }
   // operator handling
@@ -76,7 +81,7 @@ function inputNumber(char) {
     reset();
   }
 
-  current = operation[active];
+  let current = operation[active];
 
   // add period only if not already present
   if (char === ".") {
